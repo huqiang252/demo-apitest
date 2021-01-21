@@ -8,45 +8,52 @@ def test_version():
 
 import requests
 
-
-class ApiHttpbinGit:
-    url = "http://httpbin.org/get"
-    params = {}
-    method = "GET"
-    headers = {"accept": "application/json"}
+class BaseApi(object):
+    method="GET"
+    url=""
+    params= {}
+    headers= {}
+    data = {}
+    json = {}
 
     def set_params(self,**params):
         self.params=params
         return self
 
+
     def run(self):
-        self.response=requests.get(self.url,
-                                   params=self.params,
-                                   headers=self.headers)
-        return self  #为了链式调用
+        self.response = requests.request(self.method,
+                                         self.url,
+                                         params=self.params,
+                                         headers=self.headers,
+                                         data=self.data,
+                                         json=self.json
+                                         )
+        return self  # 为了链式调用
 
     def validate(self,key,expected_value):
         actual_value= getattr(self.response,key)  #getattr() 函数用于返回一个对象属性值
         assert actual_value==expected_value
         return self
 
-class ApiHttpBinPost:
+
+
+class ApiHttpbinGit(BaseApi):
+    url = "http://httpbin.org/get"
+    params = {}
+    method = "GET"
+    headers = {"accept": "application/json"}
+
+
+class ApiHttpBinPost(BaseApi):
     url = "http://httpbin.org/post"
     params = {}
     method = "POST"
     headers = {"accept": "application/json"}
+    data=""
     json = {"abc":123}
 
-    def run(self):
-        self.response = requests.post(self.url,
-                                      headers=self.headers,
-                                      json=self.json)
-        return self
 
-    def validate(self,key,expected_value):
-        actual_value= getattr(self.response,key)
-        assert actual_value==expected_value
-        return self
 
 
 def test_httpbin_get():
@@ -63,15 +70,6 @@ def test_httpbin_get_with_prams():
 
 
 def test_httpbin_post():
-    # resp = requests.post(
-    #     "http://httpbin.org/post",
-    #     headers={"accept": "application/json"},
-    #     json={"abc": 123}
-    # )
-    # assert resp.status_code == 200
-    # assert resp.headers["server"] == "gunicorn/19.9.0"
-    # assert resp.json()['url'] == "http://httpbin.org/post"
-    # assert resp.json()['json']['abc']== 123
 
     ApiHttpBinPost().run()\
         .validate("status_code",200)
