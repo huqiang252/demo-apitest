@@ -1,28 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from hogwarts_apitest.api import BaseApi
+from tests.api.httpbin import *
 
 
 def test_version():
     from hogwarts_apitest import __version__
     assert isinstance(__version__, str)  # 校验其是一个字符串
-
-
-
-class ApiHttpbinGit(BaseApi):
-    url = "http://httpbin.org/get"
-    params = {}
-    method = "GET"
-    headers = {"accept": "application/json"}
-
-
-class ApiHttpBinPost(BaseApi):
-    url = "http://httpbin.org/post"
-    params = {}
-    method = "POST"
-    headers = {"accept": "application/json"}
-    data=""
-    json = {"abc":123}
 
 
 def test_httpbin_get():
