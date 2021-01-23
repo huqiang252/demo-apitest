@@ -36,3 +36,20 @@ def test_httpbin_post():
         .validate("json().headers.Accept", "application/json")\
         .validate("json().json.yyy",999)
 
+
+def test_httpbin_parameters_share():
+    user_id = "adk129"
+
+    ApiHttpbinGit().set_params(user_id=user_id).run() \
+        .validate("status_code", 200) \
+        .validate("headers.server", "gunicorn/19.9.0") \
+        .validate("json().url", "http://httpbin.org/get?user_id={}".format(user_id)) \
+        .validate("json().headers.Accept", "application/json")
+
+    ApiHttpBinPost() \
+        .set_json({"userid": user_id}) \
+        .run() \
+        .validate("status_code", 200) \
+        .validate("headers.server", "gunicorn/19.9.0") \
+        .validate("json().headers.Accept", "application/json") \
+        .validate("json().json.userid", "adk129")
