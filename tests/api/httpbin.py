@@ -5,15 +5,22 @@ from hogwarts_apitest.api import BaseApi
 
 class ApiHttpbinGit(BaseApi):
     url = "http://httpbin.org/get"
-    params = {}
     method = "GET"
+    params = {}
     headers = {"accept": "application/json"}
 
 
 class ApiHttpBinPost(BaseApi):
     url = "http://httpbin.org/post"
-    params = {}
     method = "POST"
+    params = {}
     headers = {"accept": "application/json"}
     data=""
     json = {"abc":123}
+
+
+class ApiHttpBinGetCookies(BaseApi):
+    url = "http://httpbin.org/cookies"
+    method = "GET"
+    params = {}
+    headers = {"accept": "application/json"}

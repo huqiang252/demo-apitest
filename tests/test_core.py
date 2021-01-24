@@ -38,6 +38,7 @@ def test_httpbin_post():
 
 
 def test_httpbin_parameters_share():
+    '''参数关联'''
     user_id = "adk129"
 
     ApiHttpbinGit().set_params(user_id=user_id).run() \
@@ -53,3 +54,25 @@ def test_httpbin_parameters_share():
         .validate("headers.server", "gunicorn/19.9.0") \
         .validate("json().headers.Accept", "application/json") \
         .validate("json().json.userid", "adk129")
+
+
+def test_httpbin_extract():
+
+    api_run =ApiHttpbinGit().run()
+    '''参数提取'''
+    status_code = api_run.extract("status_code")
+    assert status_code==200
+
+    server = api_run.extract("headers.server")
+    assert server=="gunicorn/19.9.0"
+
+    accept_type = api_run.extract("json().headers.Accept")
+    assert accept_type == "application/json"
+
+
+
+
+
+
+
+
