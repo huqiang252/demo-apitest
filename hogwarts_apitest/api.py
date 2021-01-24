@@ -3,8 +3,6 @@
 
 import requests
 
-session = requests.sessions.Session()
-
 class BaseApi(object):
     method = "GET"
     url = ""
@@ -21,8 +19,8 @@ class BaseApi(object):
         self.params = params
         return self
 
-    def set_cookies(self,key,value):
-        self.cookies.update({key:value})
+    def set_cookies(self, key, value):
+        self.cookies.update({key: value})
         return self
 
     def set_data(self, data):
@@ -33,23 +31,21 @@ class BaseApi(object):
         self.json = json_data
         return self
 
-    def run(self):
+    def  run(self,session=None):
+        session=session or requests.sessions.Session()
 
         self.response = session.request(self.method,
-                                         self.url,
-                                         params=self.params,
-                                         cookies=self.cookies,
-                                         headers=self.headers,
-                                         data=self.data,
-                                         json=self.json
-                                         )
+                                        self.url,
+                                        params=self.params,
+                                        cookies=self.cookies,
+                                        headers=self.headers,
+                                        data=self.data,
+                                        json=self.json
+                                        )
         return self
 
-
-
-
-    def extract(self,field):
-        #参数提取
+    def extract(self, field):
+        # 参数提取
         value = self.response
         for _key in field.split("."):
             if isinstance(value, requests.Response):
@@ -66,5 +62,5 @@ class BaseApi(object):
         assert actual_value == expected_value
         return self
 
-    def get_response(self)->requests.models.Response:
+    def get_response(self) -> requests.models.Response:
         return self.response

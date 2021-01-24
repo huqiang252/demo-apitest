@@ -97,14 +97,15 @@ def test_httpbin_parameters_extract():
         .validate("json().headers.Accept", "application/json") \
         .validate("json().json.freeform", freeform)
 
-def test_httpbin_login_status():
+
+def test_httpbin_login_status(init_session):
     #step1: 登录 和 获取cookie
-    ApiHttpBinGetSetCookies().set_params(freeform="567").run()
+    ApiHttpBinGetSetCookies().set_params(freeform="567").run(init_session)
 
     #step2: 期望 第一个设置的cookie 在 第二个请求中也带上
     resp=ApiHttpBinPost() \
         .set_json({"abc": 123}) \
-        .run().get_response()
+        .run(init_session).get_response()
 
     request_headers = resp.request.headers
     assert "freeform=567" in request_headers["Cookie"]
